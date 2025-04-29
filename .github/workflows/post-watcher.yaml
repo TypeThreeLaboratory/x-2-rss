@@ -1,0 +1,34 @@
+name: PostWatcher
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+jobs:
+  post-watcher:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create sessions.jsonl
+        run: |
+          echo '${{ secrets.SESSIONS }}' > sessions.jsonl
+      - name: Docker Compose
+        run: |
+          docker compose up -d
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+      - name: Get RSS
+        run: |
+          ruby get-rss.rb
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+          git-config-name: github-actions[bot]
+          git-config-email: github-actions[bot]@users.noreply.github.com
+permissions:
+  contents: write
