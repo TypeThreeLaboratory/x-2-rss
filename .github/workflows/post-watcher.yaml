@@ -9,10 +9,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Configure Git user
-        run: |
-          git config --local user.email ""
-          git config --local user.name "PostWatcher"
       - name: Create sessions.jsonl
         run: |
           echo '${{ secrets.SESSIONS }}' > sessions.jsonl
@@ -32,5 +28,7 @@ jobs:
         with:
           branch: gh-pages
           folder: dist
+          git-config-name: github-actions[bot]
+          git-config-email: github-actions[bot]@users.noreply.github.com
 permissions:
   contents: write
