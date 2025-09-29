@@ -19,10 +19,10 @@ end
 def replace(text)
   text
     .gsub("http://", "https://")
+    .gsub(/\n *<atom:link .*? \/>/, "")
     .gsub(/#m(?=<\/)/, "")
     .gsub(/\n *<description>.*?<\/description>/m, "")
     .gsub(/\n *<image>.*?<\/image>/m, "")
-    .gsub(/\n *<title>.*?<\/title>/m, "")
     .gsub(/\n *<dc:creator>.*?<\/dc:creator>/m, "")
 end
 
