@@ -47,23 +47,30 @@ def download(url, path)
   end
 end
 
-def saveREADME(path, text)
-  File.open(path, "w") do |file|
-    file.puts(text)
-  end
-  puts "README.md saved to #{path}"
-end
-
 if __FILE__ == $0
-  usersText = ""
-  users = get_users()
+  html_body = ""
 
+  users = get_users()
   users.each do |item|
+    # RSSフィードをダウンロード
     if download("http://#{Address}/#{item}/rss", "dist/#{item}.rss")
-      usersText << "## [#{item}](./#{item}.rss)\n"
+      html_body << "<h2><a href=\"./#{item}.rss\">#{item}</a></h2>\n"
     end
   end
 
+  # 完全なHTMLドキュメントを作成
+  html_output = <<~HTML
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+      <meta charset="UTF-8">
+      <title>RSS Feeds</title>
+    </head>
+    <body>
+    #{html_body}</body>
+    </html>
+  HTML
+
   FileUtils.mkdir_p("dist") unless Dir.exist?("dist")
-  saveREADME("dist/README.md", usersText)
+  File.write("dist/index.html", html_output)
 end
