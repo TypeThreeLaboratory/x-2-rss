@@ -12,10 +12,13 @@ jobs:
       - name: Create sessions.jsonl
         run: |
           echo '${{ secrets.SESSIONS }}' > sessions.jsonl
+      - name: Docker Compose PULL
+        run: |
+          docker compose pull
       - name: Docker layer caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
+        uses: jpribyl/action-docker-layer-caching@v0.0.11
         continue-on-error: true
-      - name: Docker Compose
+      - name: Docker Compose UP
         run: |
           docker compose up -d
       - name: Setup Ruby
