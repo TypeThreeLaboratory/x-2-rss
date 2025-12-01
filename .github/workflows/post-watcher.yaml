@@ -16,7 +16,7 @@ jobs:
         run: |
           docker compose pull
       - name: Docker layer caching
-        uses: jpribyl/action-docker-layer-caching@v0.0.11
+        uses: jpribyl/action-docker-layer-caching@v0.1.1
         continue-on-error: true
       - name: Docker Compose UP
         run: |
