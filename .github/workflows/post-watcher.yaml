@@ -12,6 +12,9 @@ jobs:
       - name: Create sessions.jsonl
         run: |
           echo '${{ secrets.SESSIONS }}' > sessions.jsonl
+      - name: Cache Docker layers
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
       - name: Docker Compose
         run: |
           docker compose up -d
