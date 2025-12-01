@@ -20,7 +20,7 @@ jobs:
         continue-on-error: true
       - name: Docker Compose UP
         run: |
-          docker compose up -d
+          docker compose up -d --build
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -29,6 +29,9 @@ jobs:
       - name: Get RSS
         run: |
           ruby get-rss.rb
+      - name: Docker Compose DOWN
+        run: |
+          docker compose down
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
