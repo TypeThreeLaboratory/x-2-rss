@@ -3,6 +3,12 @@ on:
   schedule:
     - cron: '*/10 * * * *'
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   post-watcher:
     runs-on: ubuntu-latest
@@ -12,6 +18,9 @@ jobs:
       - name: Create sessions.jsonl
         run: |
           echo '${{ secrets.SESSIONS }}' > sessions.jsonl
+      - name: Create users.json
+        run: |
+          echo '${{ vars.USERS }}' > users.json
       - name: Docker Compose
         run: |
           docker compose up -d
@@ -23,12 +32,12 @@ jobs:
       - name: Get RSS
         run: |
           ruby get-rss.rb
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          branch: gh-pages
-          folder: dist
-          git-config-name: github-actions[bot]
-          git-config-email: github-actions[bot]@users.noreply.github.com
-permissions:
-  contents: write
+          path: 'dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
