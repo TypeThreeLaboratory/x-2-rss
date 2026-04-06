@@ -1,5 +1,6 @@
 dist/*
 !dist/_headers
+!dist/CNAME
 
 sessions.jsonl
 
